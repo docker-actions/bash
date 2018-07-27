@@ -26,6 +26,12 @@ RUN echo "LC_ALL=en_US.UTF-8" > /etc/environment \
         && cp -R /usr/share/locales $ROOTFS/usr/share/locales \
         && cp -R /usr/share/i18n $ROOTFS/usr/share/i18n
 
+# CA certs
+RUN apt-get install -y ca-certificates \
+      && update-ca-certificates \
+      && cp -r /etc/ssl $ROOTFS/etc \
+      && cp -r /usr/share/ca-certificates $ROOTFS/usr/share
+
 # Unpack required packges to rootfs
 RUN cd ${BUILD_DEBS} \
   && for pkg in $REQUIRED_PACKAGES; do \
