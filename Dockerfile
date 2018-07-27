@@ -50,6 +50,8 @@ RUN if [ "x$(ls ${BUILD_DEBS}/)" = "x" ]; then \
 RUN echo "root:x:0:0:root:/home:/bin/bash" > ${ROOTFS}/etc/passwd \
     && echo "root:x:0:" > ${ROOTFS}/etc/group
 
+RUN ln -s bash ${ROOTFS}/bin/sh
+
 COPY entrypoint.sh ${ROOTFS}/usr/local/bin/entrypoint.sh
 RUN chmod +x ${ROOTFS}/usr/local/bin/entrypoint.sh
 
