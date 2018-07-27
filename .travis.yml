@@ -9,8 +9,12 @@ script:
 before_deploy:
   - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
 deploy:
-  provider: script
-  script: docker push ${image_name}:${tag}
-  on:
-    branch: master
-    tags: true
+  - provider: script
+    script: docker push ${image_name}:${tag}
+    on:
+      branch: master
+  - provider: script
+    script: docker push ${image_name}:${tag}
+    on:
+      branch: master
+      tags: true
