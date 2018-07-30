@@ -1,6 +1,6 @@
 FROM ubuntu:bionic as build
 
-ARG REQUIRED_PACKAGES="coreutils bash zlib1g libtinfo5 libselinux1"
+ARG REQUIRED_PACKAGES="coreutils bash zlib1g libtinfo5 libselinux1 libacl1"
 
 ENV ROOTFS /build/rootfs
 ENV BUILD_DEBS /build/debs
