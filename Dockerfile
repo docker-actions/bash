@@ -47,10 +47,20 @@ RUN if [ "x$(ls ${BUILD_DEBS}/)" = "x" ]; then \
       done; \
     fi
 
+# Fake user
 RUN echo "root:x:0:0:root:/home:/bin/bash" > ${ROOTFS}/etc/passwd \
     && echo "root:x:0:" > ${ROOTFS}/etc/group
 
+# /bin/sh
 RUN ln -s bash ${ROOTFS}/bin/sh
+
+# Move /sbin out of the way
+RUN mv ${ROOTFS}/sbin ${ROOTFS}/sbin.orig \
+      && mkdir -p ${ROOTFS}/sbin \
+      && for b in ${ROOTFS}/sbin.orig/*; do \
+           echo 'cmd=$(basename ${BASH_SOURCE[0]}); exec /sbin.orig/$cmd "$@"' > ${ROOTFS}/sbin/$(basename $b); \
+           chmod +x ${ROOTFS}/sbin/$(basename $b); \
+         done
 
 COPY entrypoint.sh ${ROOTFS}/usr/local/bin/entrypoint.sh
 RUN chmod +x ${ROOTFS}/usr/local/bin/entrypoint.sh
