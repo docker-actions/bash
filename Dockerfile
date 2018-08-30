@@ -51,6 +51,9 @@ RUN if [ "x$(ls ${BUILD_DEBS}/)" = "x" ]; then \
 RUN echo "root:x:0:0:root:/home:/bin/bash" > ${ROOTFS}/etc/passwd \
     && echo "root:x:0:" > ${ROOTFS}/etc/group
 
+# Fix DNS resolution issues when nss is not installed
+RUN echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> ${ROOTFS}/etc/nsswitch.conf
+
 # /bin/sh
 RUN ln -s bash ${ROOTFS}/bin/sh
 
