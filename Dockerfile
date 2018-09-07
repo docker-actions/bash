@@ -7,7 +7,7 @@ ENV BUILD_DEBS /build/debs
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Build pre-requisites
-RUN bash -c 'mkdir -p ${BUILD_DEBS} ${ROOTFS}/{bin,sbin,usr/share,usr/bin,usr/sbin,usr/lib,/usr/local/bin,etc}'
+RUN bash -c 'mkdir -p ${BUILD_DEBS} ${ROOTFS}/{bin,sbin,usr/share,usr/bin,usr/sbin,usr/lib,/usr/local/bin,etc,container_user_home}'
 
 # Fix permissions
 RUN chown -Rv 100:root $BUILD_DEBS
@@ -48,7 +48,7 @@ RUN if [ "x$(ls ${BUILD_DEBS}/)" = "x" ]; then \
     fi
 
 # Fake user
-RUN echo "root:x:0:0:root:/home:/bin/bash" > ${ROOTFS}/etc/passwd \
+RUN echo "root:x:0:0:root:/container_user_home:/bin/bash" > ${ROOTFS}/etc/passwd \
     && echo "root:x:0:" > ${ROOTFS}/etc/group
 
 # Fix DNS resolution issues when nss is not installed
