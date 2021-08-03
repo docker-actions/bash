@@ -1,4 +1,7 @@
 language: minimal
+arch:
+  - amd64
+  - arm64
 sudo: required
 services:
   - docker
