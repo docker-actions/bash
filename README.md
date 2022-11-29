@@ -1,2 +1,2 @@
-# bash [![Build Status](https://travis-ci.com/docker-actions/bash.svg?branch=master)](https://travis-ci.com/docker-actions/bash)
+# bash ![Build Status](https://github.com/docker-actions/bash/actions/workflows/docker.yml/badge.svg)
 Docker action: bash
