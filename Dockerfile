@@ -1,4 +1,4 @@
-FROM ubuntu:focal as build
+FROM ubuntu:jammy as build
 
 ARG REQUIRED_PACKAGES="coreutils bash zlib1g libtinfo6 libselinux1 libacl1"
 
