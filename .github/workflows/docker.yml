@@ -14,7 +14,6 @@ on:
       - "./*.md"
       - "./**/*.md"
       - .gitignore
-    tags: [ "*" ]
 
 jobs:
   build:
@@ -63,6 +62,7 @@ jobs:
         username: ${{ secrets.REGISTRY_USER }}
         password: ${{ secrets.REGISTRY_PASS }}
     - name: Docker Buildx (push)
+      if: matrix.os == 'alpine'
       run: |
         docker buildx build \
           --cache-from "type=local,src=/tmp/.buildx-cache" \
@@ -70,6 +70,19 @@ jobs:
           --output "type=image,push=true" \
           -f Dockerfile.${{ matrix.os }} \
           --tag ${DOCKER_ORG}/${IMAGE_NAME}:${{ steps.get_version.outputs.VERSION }}-${{ matrix.os }} \
+          --tag ${DOCKER_ORG}/${IMAGE_NAME}:5.2.12-1-alpine3.17 \
+          .
+    - name: Docker Buildx (push) latest
+      if: matrix.os == 'jammy'
+      run: |
+        docker buildx build \
+          --cache-from "type=local,src=/tmp/.buildx-cache" \
+          --platform linux/amd64,linux/arm64 \
+          --output "type=image,push=true" \
+          -f Dockerfile.${{ matrix.os }} \
+          --tag ${DOCKER_ORG}/${IMAGE_NAME}:${{ steps.get_version.outputs.VERSION }} \
+          --tag ${DOCKER_ORG}/${IMAGE_NAME}:${{ steps.get_version.outputs.VERSION }}-${{ matrix.os }} \
+          --tag ${DOCKER_ORG}/${IMAGE_NAME}:5.1.16-1-jammy \
           .
     - name: Inspect image
       run: |
