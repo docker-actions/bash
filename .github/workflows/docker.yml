@@ -19,7 +19,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        os: [jammy, alpine]
     steps:
     - name: Dump GitHub context
       env:
@@ -52,7 +54,8 @@ jobs:
           --cache-to "type=local,dest=/tmp/.buildx-cache" \
           --platform linux/amd64,linux/arm64 \
           --output "type=image,push=false" \
-          --tag ${DOCKER_ORG}/${IMAGE_NAME}:${{ steps.get_version.outputs.VERSION }} \
+          -f Dockerfile.${{ matrix.os }} \
+          --tag ${DOCKER_ORG}/${IMAGE_NAME}:${{ steps.get_version.outputs.VERSION }}-${{ matrix.os }} \
           .
     - name: Login to DockerHub
       uses: docker/login-action@v2
@@ -65,8 +68,9 @@ jobs:
           --cache-from "type=local,src=/tmp/.buildx-cache" \
           --platform linux/amd64,linux/arm64 \
           --output "type=image,push=true" \
-          --tag ${DOCKER_ORG}/${IMAGE_NAME}:${{ steps.get_version.outputs.VERSION }} \
+          -f Dockerfile.${{ matrix.os }} \
+          --tag ${DOCKER_ORG}/${IMAGE_NAME}:${{ steps.get_version.outputs.VERSION }}-${{ matrix.os }} \
           .
     - name: Inspect image
       run: |
-        docker buildx imagetools inspect ${DOCKER_ORG}/${IMAGE_NAME}:${{ steps.get_version.outputs.VERSION }}
+        docker buildx imagetools inspect ${DOCKER_ORG}/${IMAGE_NAME}:${{ steps.get_version.outputs.VERSION }}-${{ matrix.os }}
