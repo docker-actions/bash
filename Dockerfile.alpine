@@ -1,10 +1,8 @@
-FROM alpine:3.17 as build
+FROM alpine:3.19 as build
 
-# ARG REQUIRED_PACKAGES="coreutils bash zlib1g libtinfo6 libselinux1 libacl1"
 ARG REQUIRED_PACKAGES="bash ca-certificates"
 
 ENV ROOTFS /build/rootfs
-# ENV BUILD_DEBS /build/debs
 
 # Install pre-requisites
 RUN apk update \
